@@ -36,6 +36,16 @@ jobs:
 
       - run: npm ci
 
+      - name: Enable and configure Pages
+        # enablement: true turns Pages on via the API, so a fresh repo does not
+        # need the Settings -> Pages step first. It cannot override a plan
+        # restriction: Pages on a PRIVATE repo needs GitHub Pro/Team/Enterprise,
+        # and this step fails with a clear message there rather than letting the
+        # deploy job 404 later.
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Build
         env:
           # A project site is served from https://<user>.github.io/<repo>/, so
