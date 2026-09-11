@@ -1,0 +1,37 @@
+# Fly.io configuration. Deploy with:
+#   cd server
+#   fly launch --no-deploy --copy-config
+#   fly volumes create menu_data --size 1
+#   fly secrets set JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+#   fly secrets set ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='<your password>'
+#   fly secrets set CORS_ORIGINS=https://<user>.github.io
+#   fly deploy
+app = "menu-backend"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "1337"
+  DATA_DIR = "/data"
+
+# The volume is what makes uploads survive a redeploy.
+[[mounts]]
+  source = "menu_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 1337
+  force_https = true
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  # SQLite writes to one file, so this must stay a single machine.
+  min_machines_running = 1
+
+  [http_service.checks]
+    [http_service.checks.health]
+      path = "/api/health"
+      interval = "30s"
+      timeout = "5s"

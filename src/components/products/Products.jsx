@@ -6,20 +6,22 @@ import { Navigation, Pagination, Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
+import api, { mediaUrl } from "../../services/api";
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:1337/api/categories?sort=displayOrder:asc")
-      .then((res) => res.json())
-      .then((data) => setCategories(data.data));
+    api
+      .get("/categories?sort=displayOrder:asc")
+      .then(({ data }) => setCategories(data.data))
+      .catch((err) => console.log(err));
 
-    fetch("http://localhost:1337/api/products?populate=*&sort=displayOrder:asc")
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data.data);
-      });
+    api
+      .get("/products?populate=*&sort=displayOrder:asc")
+      .then(({ data }) => setProducts(data.data))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -53,7 +55,7 @@ const Products = () => {
 
           {product.image && (
             <img
-              src={`http://localhost:1337${product.image.url}`}
+              src={mediaUrl(product.image.url)}
               alt={product.title}
               className=" w-38 h-38 object-fit rounded-xl"
             />

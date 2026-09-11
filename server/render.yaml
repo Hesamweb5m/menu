@@ -1,0 +1,38 @@
+# Render blueprint. Point Render at this file (New -> Blueprint) or configure
+# the same values by hand in the dashboard.
+#
+# IMPORTANT: the disk below is what keeps the menu and its uploaded images
+# across deploys, and Render only offers disks on paid instance types. On the
+# free tier the filesystem is wiped on every deploy and after inactivity, so
+# treat a free deployment as a demo. Railway and Fly.io both offer volumes at
+# lower cost if persistence matters.
+services:
+  - type: web
+    name: menu-backend
+    runtime: node
+    plan: starter
+    rootDir: server
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      # Generated once by Render and kept across deploys.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      # Set this to your GitHub Pages origin, e.g. https://hesamweb5m.github.io
+      - key: CORS_ORIGINS
+        sync: false
+    disk:
+      name: menu-data
+      mountPath: /var/data
+      sizeGB: 1

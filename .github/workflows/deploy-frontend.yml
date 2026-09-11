@@ -1,0 +1,75 @@
+name: Deploy frontend to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "index.html"
+      - "vite.config.js"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/deploy-frontend.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a newer push cancel an in-flight deploy rather than queueing behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          # A project site is served from https://<user>.github.io/<repo>/, so
+          # the bundle's asset URLs have to be prefixed with the repo name.
+          # Override by setting a VITE_BASE repository variable (use "/" for a
+          # user site or a custom domain).
+          VITE_BASE: ${{ vars.VITE_BASE || format('/{0}/', github.event.repository.name) }}
+          # Origin of the deployed backend, e.g.
+          # https://menu-backend.onrender.com
+          # Set this as a repository variable: Settings -> Secrets and
+          # variables -> Actions -> Variables -> New repository variable.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: |
+          if [ -z "$VITE_API_URL" ]; then
+            echo "::warning::VITE_API_URL is not set; the site will try to reach http://localhost:1337 and show an empty menu."
+          fi
+          npm run build
+
+      - name: Add SPA fallback
+        # GitHub Pages has no rewrite rules, so a deep link like /menu or
+        # /manage would 404 on refresh. Serving the app itself as the 404 page
+        # lets React Router handle the URL.
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

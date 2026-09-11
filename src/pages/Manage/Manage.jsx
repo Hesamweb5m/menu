@@ -4,7 +4,6 @@
   import api from "../../services/api";
   import Table from "./Table/Table";
   import Header from "./components/header";
-  import Title from "./components/ProductControl";
   import ProductControl from "./components/productcontrol";
   import CategoryControl from "./components/categorycontrol";
   import Footer from "./components/Footer";

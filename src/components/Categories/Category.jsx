@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
+import api, { mediaUrl } from "../../services/api";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -9,11 +10,9 @@ const Category = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:1337/api/categories?populate=*&sort=displayOrder:asc")
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data.data);
-      })
+    api
+      .get("/categories?populate=*&sort=displayOrder:asc")
+      .then(({ data }) => setCategories(data.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -36,7 +35,7 @@ const Category = () => {
           >
             {item.image?.length > 0 && (
               <img
-                src={`http://localhost:1337${item.image[0].url}`}
+                src={mediaUrl(item.image[0].url)}
                 alt={item.name}
                 className="w-20 h-18 object-cover rounded-full"
               />
