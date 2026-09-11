@@ -1,0 +1,99 @@
+
+body{
+font-family: IRANSansX;}
+.main{
+    border-radius: 80px 80px 0px 0px;
+}
+.bg-header{
+    border-radius: 0px 0px 30px 30px;
+}
+html {
+  scroll-behavior: smooth;
+  direction: rtl;
+}
+.category::before{
+content: "";
+display:inline-block;
+background-color: rgb(255, 119, 0);
+width: 20px;
+height: 10px;
+border-radius: 100px;
+margin-left: 10px;
+
+}
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 100;
+  src: url("../public/fonts/IRANSansX-Thin.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../public/fonts/IRANSansX-UltraLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../public/fonts/IRANSansX-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../public/fonts/IRANSansX-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 600;
+  src: url("../public/fonts/IRANSansX-DemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 800;
+  src: url("../public/fonts/IRANSansX-ExtraBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 900;
+  src: url("../public/fonts/IRANSansX-Black.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 950;
+  src: url("../public/fonts/IRANSansX-ExtraBlack.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: 1000;
+  src: url("../public/fonts/IRANSansX-Heavy.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../public/fonts/IRANSansX-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: IRANSansX;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../public/fonts/IRANSansX-Regular.woff") format("woff");
+}
